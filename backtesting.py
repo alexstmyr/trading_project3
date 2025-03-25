@@ -49,7 +49,7 @@ def run_backtest(dataset, initial_capital=1_000_000, n_shares=2000, com=0.125 / 
                 capital -= cost
 
                 active_long_pos = {
-                    'datetime': row.Datetime,
+                    'datetime': row.name,
                     'opened_at': row.Close,
                     'take_profit': row.Close * (1+take_profit),
                     'stop_loss': row.Close * (1-stop_loss)
@@ -68,7 +68,7 @@ def run_backtest(dataset, initial_capital=1_000_000, n_shares=2000, com=0.125 / 
         # Calculate Long positions value
         position_value = 0
         if active_long_pos:
-            long_value = row.Close * n_shares
+            position_value = row.Close * n_shares
         elif active_short_pos:
             position_value = active_short_pos['entry'] * n_shares - row.Close * n_shares
 
