@@ -33,12 +33,12 @@ def run_backtest(dataset, initial_capital=1_000_000, n_shares=2000, com=0.125 / 
                 # recomprar caro = pérdida
                 cost = row.Close * n_shares * (1 + com)
                 pnl = active_short_pos['entry'] * n_shares - cost
-                capital += active_short_pos['entry'] * n_shares - pnl  # restamos pérdida
+                capital -= pnl  # restamos pérdida
                 active_short_pos = None
             elif row.Close < active_short_pos['take_profit']:
                 # recomprar barato = ganancia
                 pnl = active_short_pos['entry'] * n_shares - row.Close * n_shares * (1 + com)
-                capital += active_short_pos['entry'] * n_shares + pnl
+                capital += pnl
                 active_short_pos = None
 
         # Open Long Pos
