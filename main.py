@@ -1,9 +1,9 @@
-from indicators import train_and_predict_svm_signals
+from indicators import trading_signals
 from backtesting import run_backtest
 import matplotlib.pyplot as plt
 
 # Entrenar modelo y generar señales
-dataset, model = train_and_predict_svm_signals('aapl_5m_train.csv', plot_signals=False)
+dataset, model = trading_signals('aapl_5m_train.csv', plot_signals=False)
 
 # Ejecutar backtest
 portfolio_value, final_capital = run_backtest(dataset)
