@@ -39,8 +39,8 @@ def trading_signals(filepath='aapl_5m_train.csv', plot_signals=True):
     # Retorno futuro a 2 horas
     dataset['future_return'] = dataset['Close'].shift(-24) / dataset['Close'] - 1
 
-    buy_threshold = 0.0015
-    sell_threshold = -0.0015
+    buy_threshold = 0.015
+    sell_threshold = -0.015
 
     def generate_signal(x):
         if x > buy_threshold:
@@ -71,7 +71,7 @@ def trading_signals(filepath='aapl_5m_train.csv', plot_signals=True):
     X_test_scaled = scaler.transform(X_test)
 
     # Modelo SVM
-    svm = SVC(kernel='rbf', C=1, gamma='scale', class_weight='balanced')
+    svm = SVC(kernel='rbf', C=1, gamma='scale', class_weight='balanced', max_iter=10_000)
     svm.fit(X_train_scaled, y_train)
 
     # Predicción
