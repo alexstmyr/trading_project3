@@ -23,13 +23,13 @@ def trading_signals(filepath='aapl_5m_train.csv', plot_signals=True):
     dataset = data.copy()
 
     # Indicadores técnicos
-    rsi = ta.momentum.RSIIndicator(dataset.Close, window=23)
+    rsi = ta.momentum.RSIIndicator(dataset.Close, window=6)
     ultimate = ta.momentum.UltimateOscillator(
         high=dataset['High'], low=dataset['Low'], close=dataset['Close'],
-        window1=7, window2=14, window3=28
+        window1=6, window2=11, window3=24
     )
     williams = ta.momentum.WilliamsRIndicator(
-        high=dataset['High'], low=dataset['Low'], close=dataset['Close'], lbp=14
+        high=dataset['High'], low=dataset['Low'], close=dataset['Close'], lbp=17
     )
 
     dataset['RSI'] = rsi.rsi()
@@ -71,33 +71,27 @@ def trading_signals(filepath='aapl_5m_train.csv', plot_signals=True):
     X_test_scaled = scaler.transform(X_test)
 
     # Modelo SVM
-    svm = SVC(kernel='rbf', C=1, gamma='scale', class_weight='balanced', max_iter=10_000)
+    svm = SVC(kernel='rbf', C=99.63300370119023, gamma='scale', class_weight='balanced', max_iter=10_000)
     svm.fit(X_train_scaled, y_train)
 
     # Predicción
-    y_pred = svm.predict(X_test_scaled)
-    print("\nClassification Report:\n")
-    print(classification_report(y_test, y_pred))
+    X_scaled_total = scaler.transform(X)
+    y_pred_total = svm.predict(X_scaled_total)
 
     # Asignar predicciones al dataset original
-    dataset.loc[idx_test, 'predicted_signal'] = y_pred
+    dataset['predicted_signal'] = y_pred_total
 
     # Gráfica de señales
     if plot_signals:
-        test_plot_df = pd.DataFrame({
-            'Close': close_prices.loc[idx_test].values,
-            'Prediction': y_pred
-        }, index=idx_test)
+        plt.figure(figsize=(12, 6))
+        plt.plot(dataset['Close'], label='Close Price', alpha=0.6)
 
-        plt.figure(figsize=(12,6))
-        plt.plot(test_plot_df['Close'], label='Close Price', alpha=0.6)
-
-        plt.scatter(test_plot_df.index[test_plot_df['Prediction'] == 'BUY'],
-                    test_plot_df['Close'][test_plot_df['Prediction'] == 'BUY'],
+        plt.scatter(dataset.index[dataset['predicted_signal'] == 'BUY'],
+                    dataset['Close'][dataset['predicted_signal'] == 'BUY'],
                     marker='^', color='green', label='BUY')
 
-        plt.scatter(test_plot_df.index[test_plot_df['Prediction'] == 'SELL'],
-                    test_plot_df['Close'][test_plot_df['Prediction'] == 'SELL'],
+        plt.scatter(dataset.index[dataset['predicted_signal'] == 'SELL'],
+                    dataset['Close'][dataset['predicted_signal'] == 'SELL'],
                     marker='v', color='red', label='SELL')
 
         plt.legend()
@@ -106,5 +100,5 @@ def trading_signals(filepath='aapl_5m_train.csv', plot_signals=True):
         plt.ylabel("Price")
         plt.grid(True)
         plt.show()
-
+        
     return dataset, svm

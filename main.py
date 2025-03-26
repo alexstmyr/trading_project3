@@ -3,7 +3,7 @@ from backtesting import run_backtest
 import matplotlib.pyplot as plt
 
 # Entrenar modelo y generar señales
-dataset, model = trading_signals('aapl_5m_train.csv', plot_signals=False)
+dataset, model = trading_signals('aapl_5m_train.csv', plot_signals=True)
 
 # Ejecutar backtest
 portfolio_value, final_capital = run_backtest(dataset)
