@@ -150,7 +150,7 @@ class Backtest:
             # Actualizar el valor total del portafolio
             self.portfolio_value.append(self.capital + position_value)
     
-    def calculate_calmar(self, bars_per_year = 20_280):
+    def calculate_calmar(self, bars_per_year = 19_656):
         
         initial_val = self.portfolio_value[0]
         final_val = self.portfolio_value[-1]
