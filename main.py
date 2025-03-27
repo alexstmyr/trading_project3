@@ -1,10 +1,17 @@
 import matplotlib.pyplot as plt
-import pandas as pd
 from pipeline import pipeline
+import os
 
 def main():
     portfolio_value, close, calmar = pipeline()
-    print("Calmar ratio_ {}".format(round(calmar, 2)))
+    
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
+    
+    print("Calmar ratio: {}".format(round(calmar, 2)))
+    print("Final portfolio value: ${:,.2f}".format(round(portfolio_value[-1], 2)))
     print("Return with strategy: {}%".format(round((portfolio_value[-1]/portfolio_value[0]-1)*100, 2)))
     
     

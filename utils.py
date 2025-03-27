@@ -118,7 +118,7 @@ class Backtest:
                 
 
             # Abrir posición Long
-            if row["Signal"] == 'BUY' and self.active_long_pos is None:
+            if row["Signal"] == 'BUY' and self.active_short_pos is None and self.active_long_pos is None:
                 cost = row.Close * self.n_shares * (1 + self.com)
                 if self.capital > cost:
                     self.capital -= cost
