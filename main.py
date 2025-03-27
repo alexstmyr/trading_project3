@@ -1,22 +1,28 @@
-from indicators import trading_signals
-from backtesting import run_backtest
 import matplotlib.pyplot as plt
+import pandas as pd
+from pipeline import pipeline
 
-# Entrenar modelo y generar señales
-dataset, model = trading_signals('aapl_5m_train.csv', plot_signals=True)
+def main():
+    portfolio_value, close, calmar = pipeline()
+    print("Calmar ratio_ {}".format(round(calmar, 2)))
+    print("Return with strategy: {}%".format(round((portfolio_value[-1]/portfolio_value[0]-1)*100, 2)))
+    
+    
+    # Plot Portfolio Value vs Close Price
+    fig, ax = plt.subplots(1, 1, figsize=(12, 6))
 
-# Ejecutar backtest
-portfolio_value, final_capital = run_backtest(dataset)
+    # Portfolio Value
+    ax.plot(portfolio_value, label="Portfolio Value", color="C0")
+    ax.set_ylabel("Portfolio Value")
+    ax.legend(loc="upper left")
 
-# Mostrar resultados
-print(f"Capital final: ${final_capital:,.2f}")
+    # Overlay Close Price
+    ax2 = ax.twinx()
+    ax2.plot(close, color="C1", label="Close Price")
+    ax2.set_ylabel("Asset Close Price")
 
-# Graficar evolución
-plt.figure(figsize=(12, 6))
-plt.plot(portfolio_value, label='Portfolio Value')
-plt.title("Evolución del portafolio durante el backtest")
-plt.xlabel("Pasos de tiempo")
-plt.ylabel("Valor del portafolio")
-plt.grid(True)
-plt.legend()
-plt.show()
+    plt.title("Portfolio Value vs Asset Close Price")
+    plt.show()
+
+if __name__ == "__main__":
+    main()
