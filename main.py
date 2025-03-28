@@ -3,7 +3,7 @@ from pipeline import pipeline
 import os
 
 def main():
-    portfolio_value, close, calmar = pipeline()
+    portfolio_value, close, calmar = pipeline(optimize= False)
     
     if os.name == 'nt':
         os.system('cls')
@@ -33,3 +33,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
