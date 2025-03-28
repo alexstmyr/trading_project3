@@ -89,6 +89,8 @@ class Backtest:
         self.stop_loss = stop_loss
         self.take_profit = take_profit
         self.calmar_ratio = 0
+        self.sortino_ratio = 0
+        self.sharpe_ratio = 0
         
     def calculate_portfolio(self, dataset: pd.DataFrame, capital: int = 1_000_000):
         
@@ -131,8 +133,8 @@ class Backtest:
 
             # Abrir posición Short (solo si no hay posición Long activa)
             if row["Signal"] == 'SELL' and self.active_short_pos is None and self.active_long_pos is None:
-                proceeds = row.Close * self.n_shares * (1 - self.com)
-                self.capital += proceeds
+                cost = row.Close * self.n_shares * (self.com)
+                self.capital -= cost
                 self.active_short_pos = {
                     'datetime': row.name,
                     'entry': row.Close,
@@ -160,7 +162,7 @@ class Backtest:
         if initial_val <= 0 or final_val <= 0:
             return 0.0  # Evita divisiones por cero o valores no válidos
         
-        cagr = (final_val / initial_val) ** (bars_per_year / n_bars) - 1
+        cagr = (final_val / initial_val) ** (1 / (n_bars/bars_per_year)) - 1
         
         # Max Drawdown
         # Para calcular MDD, podemos hacer un track del máximo acumulado y ver la caída relativa
