@@ -3,7 +3,7 @@ from pipeline import pipeline
 import os
 
 def main():
-    portfolio_value, close, calmar = pipeline(optimize= False)
+    portfolio_value, close, calmar, sharpe, sortino = pipeline(optimize= False)
     
     if os.name == 'nt':
         os.system('cls')
@@ -11,6 +11,8 @@ def main():
         os.system('clear')
     
     print("Calmar ratio: {}".format(round(calmar, 2)))
+    print("Sharpe ratio: {}".format(round(sharpe, 2)))
+    print("Sortino ratio: {}".format(round(sortino, 2)))
     print("Final portfolio value: ${:,.2f}".format(round(portfolio_value[-1], 2)))
     print("Return with strategy: {}%".format(round((portfolio_value[-1]/portfolio_value[0]-1)*100, 2)))
     

@@ -181,3 +181,14 @@ class Backtest:
             return cagr if cagr > 0 else 0.0
         
         self.calmar_ratio = cagr / max_drawdown
+        
+    def calculate_sharpe(self):
+        # calculate 
+        
+        self.sharpe_ratio = 0 # change to the final sharpe value
+        
+    def calculate_sortino(self):
+        # calculate 
+    
+        self.sortino_ratio = 0 # change to the final sortino value
+        

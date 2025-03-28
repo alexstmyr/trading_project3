@@ -212,7 +212,8 @@ def pipeline(optimize: bool = True):
 
     backtesting.calculate_portfolio(test_data.dataframe)
     backtesting.calculate_calmar()
+    backtesting.calculate_sortino()
+    backtesting.calculate_sharpe()
 
-    # print(backtesting.calmar_ratio)
     
-    return backtesting.portfolio_value, test_data.dataframe.Close, backtesting.calmar_ratio
+    return backtesting.portfolio_value, test_data.dataframe.Close, backtesting.calmar_ratio, backtesting.sharpe_ratio, backtesting.sortino_ratio
