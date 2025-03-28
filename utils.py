@@ -3,6 +3,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 import sklearn
 from sklearn.metrics import f1_score
+import numpy as np
 
 class TechnicalIndicator:
     
@@ -182,13 +183,35 @@ class Backtest:
         
         self.calmar_ratio = cagr / max_drawdown
         
-    def calculate_sharpe(self):
-        # calculate 
+    def calculate_sharpe(self, bars_per_year = 19_656, rfr = 0.05):
+        returns = pd.Series(self.portfolio_value).pct_change().dropna()
+
+        excess_returns = returns - (rfr / bars_per_year)
+
+        mean_excess_return = excess_returns.mean()
+        std_return = returns.std()
+
+        if std_return == 0:
+            self.sharpe_ratio = 0.0
+            return
         
-        self.sharpe_ratio = 0 # change to the final sharpe value
+        self.sharpe_ratio = (mean_excess_return / std_return) * np.sqrt(bars_per_year)
         
-    def calculate_sortino(self):
-        # calculate 
-    
-        self.sortino_ratio = 0 # change to the final sortino value
+    def calculate_sortino(self, bars_per_year = 19_656, rfr = 0.05):
+        returns = pd.Series(self.portfolio_value).pct_change().dropna()
+
+        # Exceso de retorno
+        excess_returns = returns - (rfr / bars_per_year)
+
+        # Retornos negativos (solo downside)
+        negative_returns = excess_returns[excess_returns < 0]
+
+        mean_excess_return = excess_returns.mean()
+        std_negative = negative_returns.std()
+
+        if std_negative == 0:
+            self.sortino_ratio = 0.0
+            return    
+        
+        self.sortino_ratio = (mean_excess_return / std_negative) * np.sqrt(bars_per_year)
         
