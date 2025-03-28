@@ -183,7 +183,7 @@ class Backtest:
         
         self.calmar_ratio = cagr / max_drawdown
         
-    def calculate_sharpe(self, bars_per_year = 19_656, rfr = 0.05):
+    def calculate_sharpe(self, bars_per_year = 19_656, rfr = 0.041):
         returns = pd.Series(self.portfolio_value).pct_change().dropna()
 
         excess_returns = returns - (rfr / bars_per_year)
@@ -197,7 +197,7 @@ class Backtest:
         
         self.sharpe_ratio = (mean_excess_return / std_return) * np.sqrt(bars_per_year)
         
-    def calculate_sortino(self, bars_per_year = 19_656, rfr = 0.05):
+    def calculate_sortino(self, bars_per_year = 19_656, rfr = 0.041):
         returns = pd.Series(self.portfolio_value).pct_change().dropna()
 
         # Exceso de retorno
