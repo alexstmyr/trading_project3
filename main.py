@@ -3,13 +3,17 @@ from pipeline import pipeline
 import os
 
 def main():
-    portfolio_value, close, calmar, sharpe, sortino = pipeline(optimize= False)
     
+    # Run the model pipeline
+    portfolio_value, close, calmar, sharpe, sortino = pipeline(optimize= False) # Change optimize to true in order to re-optimize the hyperparameters
+    
+    # Clear the console to print results
     if os.name == 'nt':
-        os.system('cls')
+        os.system('cls') # Windows
     else:
-        os.system('clear')
+        os.system('clear') # macos/linux
     
+    # Print ratios, final portfolio value and trading strategy's return rate
     print("Calmar ratio: {}".format(round(calmar, 2)))
     print("Sharpe ratio: {}".format(round(sharpe, 2)))
     print("Sortino ratio: {}".format(round(sortino, 2)))
